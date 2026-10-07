@@ -16,10 +16,10 @@ Aplicación web básica que aplica el patrón **MVC** con las operaciones **CRUD
   - **Update:** cambiar el estado médico (Apto / Baja médica).
   - **Delete:** retirar un peleador del torneo.
 - Las URLs protegidas **no son accesibles sin autenticación**:
-  - En Angular, un *guard* redirige a `/login`.
-  - En Django, la API responde **401 Unauthorized** sin token.
+  - En Django, `/api/peleadores/` responde **401 Unauthorized** sin token.
+  - En Angular, la pantalla del CRUD solo se muestra si hay sesión iniciada.
 - Contraseñas guardadas **encriptadas (hash PBKDF2-SHA256)**, nunca en texto plano.
-- Cierre de sesión que invalida el token en el servidor.
+- Cierre de sesión.
 
 ## 🧱 Patrón MVC
 
@@ -27,7 +27,7 @@ Aplicación web básica que aplica el patrón **MVC** con las operaciones **CRUD
 |---|---|---|
 | **Modelo** | `backend/torneo/models.py` | Define la tabla `Peleador` y sus datos |
 | **Controlador** | `backend/torneo/views.py` | Recibe las peticiones, usa el modelo y responde |
-| **Vista** | `frontend/src/app/paginas/` | Pantallas de login y del CRUD (Angular) |
+| **Vista** | `frontend/src/app/app.ts` | Pantalla de login y pantalla del CRUD (Angular) |
 
 ```
 Angular (Vista) ──HTTP + Token──▶ Django (Controlador) ──▶ SQLite (Modelo)
@@ -39,12 +39,9 @@ Angular (Vista) ──HTTP + Token──▶ Django (Controlador) ──▶ SQLit
 ProyectoIngenieraWeb/
 ├── backend/
 │   ├── config/            # configuración de Django
-│   └── torneo/            # models, views, serializers, urls
+│   └── torneo/            # models.py, views.py, serializers.py, urls.py
 ├── frontend/
-│   └── src/app/
-│       ├── servicios/     # auth.service y peleador.service
-│       ├── guards/        # auth.guard (protege la ruta)
-│       └── paginas/       # login y peleadores (CRUD)
+│   └── src/app/app.ts     # login + CRUD en un solo componente
 └── README.md
 ```
 
@@ -81,7 +78,6 @@ Queda en `http://localhost:4200`. Entra con el usuario que creaste.
 | Método | URL | Protegida | Acción |
 |---|---|---|---|
 | POST | `/api/login/` | No | Devuelve un token |
-| POST | `/api/logout/` | Sí | Invalida el token |
 | GET | `/api/peleadores/` | Sí | Leer |
 | POST | `/api/peleadores/` | Sí | Crear |
 | PATCH | `/api/peleadores/{id}/` | Sí | Actualizar |
