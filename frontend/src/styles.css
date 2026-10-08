@@ -1,9 +1,9 @@
 body { font-family: 'Segoe UI', Roboto, Arial, sans-serif; background: #121212; color: #fff; margin: 0; display: flex; justify-content: center; padding: 40px 20px; }
 .contenedor { background: #1e1e1e; width: 100%; max-width: 650px; padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,.5); }
 h1, h3 { text-align: center; color: #e50914; margin-top: 0; }
-.formulario { display: flex; gap: 10px; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #333; }
+.formulario { display: flex; gap: 10px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #333; }
 .columna { flex-direction: column; }
-input { flex: 1; padding: 12px; border: 1px solid #444; border-radius: 6px; background: #2a2a2a; color: #fff; font-size: 14px; }
+input { flex: 1; width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid #444; border-radius: 6px; background: #2a2a2a; color: #fff; font-size: 14px; }
 input:focus { outline: none; border-color: #e50914; }
 button { background: #e50914; color: #fff; border: none; padding: 12px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; }
 button:hover { background: #b20710; }
@@ -17,5 +17,9 @@ li.baja-medica { border-left-color: #f44336; opacity: .7; }
 .btn-estado { background: #ff9800; } .btn-estado:hover { background: #e68a00; }
 .btn-eliminar, .btn-salir { background: #444; } .btn-eliminar:hover, .btn-salir:hover { background: #222; }
 .error { background: #3b1114; color: #ff8a8a; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; }
+.ok { background: #12301a; color: #8aff9d; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; }
 .barra { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; color: #aaa; font-size: 14px; }
 .vacio { text-align: center; color: #888; }
+.cambiar { text-align: center; color: #888; font-size: 14px; }
+.enlace { background: none; color: #e50914; padding: 0; text-decoration: underline; font-weight: normal; }
+.enlace:hover { background: none; color: #ff4d56; }

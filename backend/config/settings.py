@@ -15,7 +15,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",               # API REST
     "rest_framework.authtoken",     # tokens para el login
-    "corsheaders",                  # permite las peticiones desde Angular (puerto 4200)
+    "corsheaders",                  # permite las peticiones desde React (puerto 5173)
     "torneo",                       # nuestra app
 ]
 
@@ -63,4 +63,4 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
 }
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:4200"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]

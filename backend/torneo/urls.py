@@ -6,6 +6,7 @@ router = DefaultRouter()
 router.register("peleadores", views.PeleadorViewSet, basename="peleador")
 
 urlpatterns = [
+    path("registro/", views.registro),
     path("login/", views.login),
     path("", include(router.urls)),
 ]

@@ -3,13 +3,14 @@
 Aplicación web básica que aplica el patrón **MVC** con las operaciones **CRUD** (crear, leer, actualizar, eliminar) sobre peleadores de un torneo, protegida por un **sistema de login** con usuario y contraseña.
 
 - **Backend:** Django + Django REST Framework
-- **Frontend:** Angular 20
+- **Frontend:** React 18 (Vite)
 - **Base de datos:** SQLite
 - **Proyecto de la materia:** Ingeniería Web — UDLA
 
 ## ✨ Funcionalidades
 
-- Inicio de sesión con usuario y contraseña.
+- Registro de cuenta: nombre, apellido, correo, celular, usuario y contraseña (mínimo 8 caracteres). Usuario y correo son únicos.
+- Inicio de sesión con **usuario o correo** y contraseña.
 - Sección protegida con el CRUD de peleadores:
   - **Create:** inscribir un peleador (nombre y gimnasio).
   - **Read:** ver la lista oficial de competidores.
@@ -17,7 +18,7 @@ Aplicación web básica que aplica el patrón **MVC** con las operaciones **CRUD
   - **Delete:** retirar un peleador del torneo.
 - Las URLs protegidas **no son accesibles sin autenticación**:
   - En Django, `/api/peleadores/` responde **401 Unauthorized** sin token.
-  - En Angular, la pantalla del CRUD solo se muestra si hay sesión iniciada.
+  - En React, la pantalla del CRUD solo se muestra si hay sesión iniciada.
 - Contraseñas guardadas **encriptadas (hash PBKDF2-SHA256)**, nunca en texto plano.
 - Cierre de sesión.
 
@@ -27,10 +28,10 @@ Aplicación web básica que aplica el patrón **MVC** con las operaciones **CRUD
 |---|---|---|
 | **Modelo** | `backend/torneo/models.py` | Define la tabla `Peleador` y sus datos |
 | **Controlador** | `backend/torneo/views.py` | Recibe las peticiones, usa el modelo y responde |
-| **Vista** | `frontend/src/app/app.ts` | Pantalla de login y pantalla del CRUD (Angular) |
+| **Vista** | `frontend/src/app/app.ts` | Pantalla de login y pantalla del CRUD (React) |
 
 ```
-Angular (Vista) ──HTTP + Token──▶ Django (Controlador) ──▶ SQLite (Modelo)
+React (Vista) ──HTTP + Token──▶ Django (Controlador) ──▶ SQLite (Modelo)
 ```
 
 ## 📁 Estructura
@@ -68,16 +69,17 @@ Queda en `http://localhost:8000`.
 ```powershell
 cd frontend
 npm install
-npx ng serve
+npm run dev
 ```
 
-Queda en `http://localhost:4200`. Entra con el usuario que creaste.
+Queda en `http://localhost:5173`. Entra con el usuario que creaste.
 
 ## 🔌 API
 
 | Método | URL | Protegida | Acción |
 |---|---|---|---|
-| POST | `/api/login/` | No | Devuelve un token |
+| POST | `/api/registro/` | No | Crea una cuenta |
+| POST | `/api/login/` | No | Devuelve un token (acepta usuario o correo) |
 | GET | `/api/peleadores/` | Sí | Leer |
 | POST | `/api/peleadores/` | Sí | Crear |
 | PATCH | `/api/peleadores/{id}/` | Sí | Actualizar |
