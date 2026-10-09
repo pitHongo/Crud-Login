@@ -1,109 +1,85 @@
-# 🥊 Gestor de Torneo MMA — CRUD + Login (MVC)
+<h1 align="center"> 🥊 Gestor de Torneo MMA </h1>
 
-Aplicación web básica que aplica el patrón **MVC** con las operaciones **CRUD** (crear, leer, actualizar, eliminar) sobre peleadores de un torneo, protegida por un **sistema de login** con usuario y contraseña.
+<p align="center">
+  <img src="https://img.shields.io/badge/STATUS-COMPLETADO-green">
+  <img src="https://img.shields.io/badge/VISTA-REACT-blue">
+  <img src="https://img.shields.io/badge/CONTROLADOR-DJANGO-darkgreen">
+  <img src="https://img.shields.io/badge/MODELO-SQLITE-lightblue">
+</p>
 
-- **Backend:** Django + Django REST Framework
-- **Frontend:** React 18 (Vite)
-- **Base de datos:** SQLite
-- **Proyecto de la materia:** Ingeniería Web — UDLA
+## 📌 Índice
+* [Descripción del Proyecto](#-descripción-del-proyecto)
+* [Características de la aplicación](#-características-de-la-aplicación)
+* [Patrón Arquitectónico MVC](#-patrón-arquitectónico-mvc)
+* [Tecnologías Utilizadas](#-tecnologías-utilizadas)
+* [Seguridad y Encriptación](#-seguridad-y-encriptación)
+* [Acceso y Ejecución del Proyecto](#-acceso-y-ejecución-del-proyecto)
+* [Autores](#-autores)
+* [Licencia](#-licencia)
 
-## ✨ Funcionalidades
+## 📖 Descripción del Proyecto
+Aplicación web robusta diseñada para gestionar las operaciones de un Torneo de Artes Marciales Mixtas (MMA). Permite a los administradores registrar, visualizar, actualizar y eliminar (CRUD) la información de los peleadores. Todo el sistema está protegido mediante autenticación de usuarios y estructurado bajo el patrón de diseño **MVC (Modelo-Vista-Controlador)**.
 
-- Registro de cuenta: nombre, apellido, correo, celular, usuario y contraseña (mínimo 8 caracteres). Usuario y correo son únicos.
-- Inicio de sesión con **usuario o correo** y contraseña.
-- Sección protegida con el CRUD de peleadores:
-  - **Create:** inscribir un peleador (nombre y gimnasio).
-  - **Read:** ver la lista oficial de competidores.
-  - **Update:** cambiar el estado médico (Apto / Baja médica).
-  - **Delete:** retirar un peleador del torneo.
-- Las URLs protegidas **no son accesibles sin autenticación**:
-  - En Django, `/api/peleadores/` responde **401 Unauthorized** sin token.
-  - En React, la pantalla del CRUD solo se muestra si hay sesión iniciada.
-- Contraseñas guardadas **encriptadas (hash PBKDF2-SHA256)**, nunca en texto plano.
-- Cierre de sesión.
+*Este proyecto es parte de la materia de Ingeniería Web de la UDLA.*
 
-## 🧱 Patrón MVC
+## ⚙️ Características de la aplicación
+- `Registro de usuarios:` Creación de cuentas validando datos obligatorios (nombre, correo, celular, etc) y contraseñas seguras.
+- `Autenticación (Login):` Acceso seguro usando el nombre de usuario o correo electrónico.
+- `Gestor de Peleadores (CRUD):`
+  - **Inscribir:** Registrar nuevos competidores al torneo.
+  - **Visualizar:** Ver la lista oficial de competidores.
+  - **Actualizar:** Cambiar el estado médico del peleador (Apto / Baja Médica).
+  - **Retirar:** Eliminar permanentemente al competidor del torneo.
+- `Rutas Protegidas:` Sistema de guardián en frontend y backend que impide el acceso a la tabla del torneo si no hay una sesión activa.
 
-| Capa | Archivo | Qué hace |
+## 🧱 Patrón Arquitectónico MVC
+
+La aplicación está diseñada siguiendo estricta separación de responsabilidades:
+
+| Capa | Archivo principal | Qué hace |
 |---|---|---|
-| **Modelo** | `backend/torneo/models.py` | Define la tabla `Peleador` y sus datos |
-| **Controlador** | `backend/torneo/views.py` | Recibe las peticiones, usa el modelo y responde |
-| **Vista** | `frontend/src/app/app.ts` | Pantalla de login y pantalla del CRUD (React) |
+| **Modelo (M)** | `backend/torneo/models.py` | Define las tablas SQLite y las reglas de los datos (Peleador, Perfil). |
+| **Vista (V)** | `frontend/src/pages/Crud.jsx` | La interfaz gráfica en React. Muestra los datos y captura las acciones del usuario. |
+| **Controlador (C)** | `backend/torneo/views.py` | La lógica (API). Recibe peticiones, consulta al Modelo y responde a la Vista. |
 
-```
-React (Vista) ──HTTP + Token──▶ Django (Controlador) ──▶ SQLite (Modelo)
-```
+## 💻 Tecnologías Utilizadas
+- **Frontend:** React + Vite, Vanilla CSS, React Router DOM.
+- **Backend:** Python, Django, Django REST Framework.
+- **Base de Datos:** SQLite.
 
-## 📁 Estructura
+## 🔐 Seguridad y Encriptación
+- **Criptografía Fuerte:** Las contraseñas **no** se guardan en texto plano y no usamos esquemas obsoletos como MD5. Django utiliza por defecto **PBKDF2 con SHA-256**, un algoritmo avanzado con iteraciones y una clave *Salt* única.
+- **Autenticación por Token:** El frontend almacena un Token de acceso seguro en el `localStorage`.
+- **Doble Protección:** El componente `ProtectedRoute` bloquea accesos no deseados desde la interfaz web, y el controlador del backend devuelve `HTTP 401 Unauthorized` bloqueando cualquier acceso directo a los datos.
 
-```
-ProyectoIngenieraWeb/
-├── backend/
-│   ├── config/            # configuración de Django
-│   └── torneo/            # models.py, views.py, serializers.py, urls.py
-├── frontend/
-│   └── src/app/app.ts     # login + CRUD en un solo componente
-└── README.md
-```
+## 🚀 Acceso y Ejecución del Proyecto
 
-## 🚀 Cómo ejecutarlo (Windows)
+Para ejecutar este proyecto en un entorno local (Windows), sigue estos pasos:
 
-**Requisitos:** Python 3.10+, Node.js 22+.
+**Requisitos previos:** `Python 3.10+` y `Node.js 22+`.
 
-### 1. Backend
-
-```powershell
+### 1. Iniciar el Backend (Django)
+Abre una terminal en la carpeta del proyecto y ejecuta:
+```bash
 cd backend
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py createsuperuser     # este será el usuario para iniciar sesión
+venv\Scripts\activate
 python manage.py runserver
 ```
 
-Queda en `http://localhost:8000`.
-
-### 2. Frontend (otra terminal)
-
-```powershell
+### 2. Iniciar el Frontend (React)
+Abre una segunda terminal en la raíz del proyecto y ejecuta:
+```bash
 cd frontend
-npm install
 npm run dev
 ```
 
-Queda en `http://localhost:5173`. Entra con el usuario que creaste.
+### 3. Abrir la Aplicación
+Dirígete a tu navegador y entra a: [http://localhost:5173/](http://localhost:5173/)
 
-## 🔌 API
+## 👤 Autores
+| [<img src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" width=115><br><sub>Matias</sub>](https://github.com) |
+| :---: |
+| **Estudiante de Ingeniería Web, UDLA** |
 
-| Método | URL | Protegida | Acción |
-|---|---|---|---|
-| POST | `/api/registro/` | No | Crea una cuenta |
-| POST | `/api/login/` | No | Devuelve un token (acepta usuario o correo) |
-| GET | `/api/peleadores/` | Sí | Leer |
-| POST | `/api/peleadores/` | Sí | Crear |
-| PATCH | `/api/peleadores/{id}/` | Sí | Actualizar |
-| DELETE | `/api/peleadores/{id}/` | Sí | Eliminar |
-
-Las rutas protegidas necesitan el header `Authorization: Token <token>`.
-
-## 🔐 Seguridad
-
-- **Encriptación de contraseñas:** Django guarda un hash **PBKDF2-SHA256** con sal. Es más seguro que MD5, que es rápido de romper. Se puede ver en `http://localhost:8000/admin/` → Users: la contraseña empieza con `pbkdf2_sha256$...`.
-- **Rutas protegidas:** `settings.py` exige autenticación por defecto en toda la API (`IsAuthenticated`); solo el login es público.
-- **Prueba sin sesión:**
-
-```powershell
-curl.exe -i http://localhost:8000/api/peleadores/
-# HTTP/1.1 401 Unauthorized
-```
-
-## 🎬 Video de demostración
-
-(Pega aquí el enlace de Loom o YouTube)
-
-Contenido: funcionamiento del login, intento de acceso a `/peleadores` sin sesión, demostración del CRUD y contraseña encriptada en `/admin/`.
-
-## 👤 Autor
-
-**Ronny** — Seguridad de la Información, UDLA
+## 📄 Licencia
+Este proyecto es de código abierto bajo licencia MIT (uso puramente académico).
