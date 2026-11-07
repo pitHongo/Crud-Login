@@ -5,7 +5,7 @@ const API = 'http://localhost:8000/api'
 
 export default function Registro() {
   const [reg, setReg] = useState({
-    nombre: '', apellido: '', correo: '', celular: '', usuario: '', clave: '',
+    nombre: '', apellido: '', correo: '', celular: '', cedula: '', usuario: '', clave: '', rol: 'inversor',
   })
   const [error, setError] = useState('')
   const navigate = useNavigate()
@@ -35,7 +35,7 @@ export default function Registro() {
 
   return (
     <div className="contenedor">
-      <h1>Torneo Regional de MMA</h1>
+      <h1>FightMetrics</h1>
       {error && <div className="error">{error}</div>}
       
       <h3>Crear cuenta</h3>
@@ -44,8 +44,13 @@ export default function Registro() {
         <input name="apellido" placeholder="Apellido" value={reg.apellido} onChange={cambiarReg} />
         <input name="correo" type="email" placeholder="Correo electrónico" value={reg.correo} onChange={cambiarReg} />
         <input name="celular" placeholder="Número de celular" value={reg.celular} onChange={cambiarReg} />
+        <input name="cedula" placeholder="Cédula (10 dígitos)" value={reg.cedula} onChange={cambiarReg} />
         <input name="usuario" placeholder="Nombre de usuario (único)" value={reg.usuario} onChange={cambiarReg} />
         <input name="clave" type="password" placeholder="Contraseña (mínimo 8 caracteres)" value={reg.clave} onChange={cambiarReg} />
+        <select name="rol" value={reg.rol} onChange={cambiarReg}>
+          <option value="inversor">Inversor (consulta el rendimiento de eventos)</option>
+          <option value="organizador">Organizador (gestiona eventos, asistencia y ventas)</option>
+        </select>
         <button type="submit">Registrarme</button>
       </form>
       <p className="cambiar">

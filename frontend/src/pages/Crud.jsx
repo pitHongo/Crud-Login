@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Navbar from '../components/Navbar'
 
 // ==========================================
 // VISTA (V) del patrón MVC: Interfaz gráfica
@@ -10,11 +11,11 @@ const API = 'http://localhost:8000/api'
 export default function Crud() {
   const navigate = useNavigate()
   const token = localStorage.getItem('token')
-  const usuarioActivo = localStorage.getItem('usuario') || ''
   
   const [peleadores, setPeleadores] = useState([])
   const [nombre, setNombre] = useState('')
-  const [gym, setGym] = useState('')
+  const [gimnasios, setGimnasios] = useState([])
+  const [gym, setGym] = useState('')   // id del gimnasio elegido en el dropdown
   const [error, setError] = useState('')
 
   const cabeceras = () => ({ 'Content-Type': 'application/json', 'Authorization': `Token ${token}` })
@@ -23,6 +24,7 @@ export default function Crud() {
   useEffect(() => { 
     if (token) {
       leer()
+      leerGimnasios()
     }
   }, [])
 
@@ -32,6 +34,11 @@ export default function Crud() {
     setPeleadores(await res.json())
   }
 
+  async function leerGimnasios() {
+    const res = await fetch(`${API}/gimnasios/`, { headers: cabeceras() })
+    if (res.ok) setGimnasios(await res.json())
+  }
+
   function salir() {
     localStorage.clear()
     navigate('/login')
@@ -39,11 +46,11 @@ export default function Crud() {
 
   async function crear(e) {
     e.preventDefault()
-    if (!nombre.trim() || !gym.trim()) { setError('Completa todos los campos.'); return }
+    if (!nombre.trim() || !gym) { setError('Completa todos los campos.'); return }
     setError('')
     await fetch(`${API}/peleadores/`, {
       method: 'POST', headers: cabeceras(),
-      body: JSON.stringify({ nombre, gimnasio: gym }),
+      body: JSON.stringify({ nombre, gimnasio: Number(gym) }),
     })
     setNombre(''); setGym(''); leer()
   }
@@ -62,18 +69,17 @@ export default function Crud() {
   }
 
   return (
-    <div className="contenedor">
-      <h1>Torneo Regional de MMA</h1>
+    <div className="contenedor ancho">
+      <Navbar />
+      <h1>FightMetrics</h1>
       {error && <div className="error">{error}</div>}
-      
-      <div className="barra">
-        <span>👤 {usuarioActivo}</span>
-        <button className="btn-salir" onClick={salir}>Cerrar sesión</button>
-      </div>
 
       <form className="formulario" onSubmit={crear}>
         <input placeholder="Nombre del peleador" value={nombre} onChange={e => setNombre(e.target.value)} />
-        <input placeholder="Gimnasio o Club" value={gym} onChange={e => setGym(e.target.value)} />
+        <select value={gym} onChange={e => setGym(e.target.value)}>
+          <option value="">Gimnasio o Club...</option>
+          {gimnasios.map(g => <option key={g.id} value={g.id}>{g.nombre} ({g.ciudad})</option>)}
+        </select>
         <button type="submit">Inscribir</button>
       </form>
 
@@ -84,7 +90,7 @@ export default function Crud() {
           <li key={p.id} className={p.apto_medico ? '' : 'baja-medica'}>
             <div className="info-peleador">
               <span className="nombre">{p.nombre}</span>
-              <span className="gym">Gym: {p.gimnasio} | Estado: {p.apto_medico ? '🟢 Apto' : '🔴 Baja Médica'}</span>
+              <span className="gym">Gym: {p.gimnasio_nombre} | Estado: {p.apto_medico ? '🟢 Apto' : '🔴 Baja Médica'}</span>
             </div>
             <div className="acciones">
               <button className="btn-estado" onClick={() => cambiarEstado(p)}>Estado Médico</button>

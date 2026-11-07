@@ -13,9 +13,9 @@ export default function Login() {
   // Mensaje de éxito si viene de registrarse
   const okMessage = location.state?.mensaje || ''
 
-  // Si ya tiene sesión, lo mandamos al crud para que no vea el login
-  if (localStorage.getItem('token')) {
-    return <Navigate to="/crud" replace />
+  // Si ya tiene sesión (con rol), lo mandamos al rendimiento para que no vea el login
+  if (localStorage.getItem('token') && localStorage.getItem('rol')) {
+    return <Navigate to="/rendimiento" replace />
   }
 
   async function iniciarSesion(e) {
@@ -32,26 +32,37 @@ export default function Login() {
     // Guardar credenciales
     localStorage.setItem('token', data.token)
     localStorage.setItem('usuario', data.username)
+    localStorage.setItem('rol', data.rol)
     
-    // Redirigir a la ruta protegida /crud
-    navigate('/crud')
+    // Redirigir a la ruta protegida /rendimiento
+    navigate('/rendimiento')
   }
 
   return (
-    <div className="contenedor">
-      <h1>Torneo Regional de MMA</h1>
-      {error && <div className="error">{error}</div>}
-      {okMessage && <div className="ok">{okMessage}</div>}
-      
-      <h3>Iniciar sesión</h3>
-      <form className="formulario columna" onSubmit={iniciarSesion}>
-        <input placeholder="Usuario o correo" value={loginUsuario} onChange={e => setLoginUsuario(e.target.value)} />
-        <input placeholder="Contraseña" type="password" value={loginClave} onChange={e => setLoginClave(e.target.value)} />
-        <button type="submit">Entrar</button>
-      </form>
-      <p className="cambiar">
-        ¿No tienes cuenta? <Link className="enlace" to="/registro">Crear una cuenta</Link>
-      </p>
+    <div className="auth">
+      <aside className="auth-marca">
+        <h1>FightMetrics</h1>
+      </aside>
+
+      <section className="auth-form">
+        <h2>Iniciar sesión</h2>
+        <p className="auth-sub">Ingresa con tu usuario o correo electrónico</p>
+        {error && <div className="error">{error}</div>}
+        {okMessage && <div className="ok">{okMessage}</div>}
+
+        <form onSubmit={iniciarSesion}>
+          <label>Usuario o correo
+            <input placeholder="Usuario o correo" value={loginUsuario} onChange={e => setLoginUsuario(e.target.value)} />
+          </label>
+          <label>Contraseña
+            <input placeholder="Contraseña" type="password" value={loginClave} onChange={e => setLoginClave(e.target.value)} />
+          </label>
+          <button type="submit">Entrar</button>
+        </form>
+        <p className="cambiar">
+          ¿No tienes cuenta? <Link className="enlace" to="/registro">Crear una cuenta</Link>
+        </p>
+      </section>
     </div>
   )
 }
