@@ -1,6 +1,10 @@
 <h1 align="center"> 🥊 FightMetrics </h1>
 
 <p align="center">
+  🌐 <a href="https://fightmetrics-udla-web.onrender.com"><b>Ver la demo en línea</b></a>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/STATUS-EN%20DESARROLLO-orange">
   <img src="https://img.shields.io/badge/VISTA-REACT-blue">
   <img src="https://img.shields.io/badge/CONTROLADOR-DJANGO-darkgreen">
@@ -169,7 +173,17 @@ Base: `http://localhost:8000/api/`. Todas las rutas (excepto registro y login) r
 | `/peleadores/` | CRUD de peleadores | Usuarios con sesión |
 
 ## ☁️ Despliegue
-Pendiente: la aplicación se ejecuta por ahora en entorno local. El enlace de la versión desplegada se agregará aquí.
+La aplicación está desplegada en [Render](https://render.com) y se describe en el archivo `render.yaml` de la raíz (infraestructura como código):
+
+| Servicio | Tecnología | Dirección |
+|---|---|---|
+| **Frontend** | React + Vite (sitio estático) | https://fightmetrics-udla-web.onrender.com |
+| **Backend (API)** | Django + gunicorn | https://fightmetrics-udla-api.onrender.com |
+| **Base de datos** | PostgreSQL | `fightmetrics-db` (interna de Render) |
+
+- **Cómo se despliega:** Render está conectado a este repositorio; cada `git push` a la rama `main` vuelve a desplegar automáticamente. El script `backend/build.sh` instala las dependencias, recolecta los estáticos, aplica las migraciones, carga los datos de ejemplo y crea el usuario Administrador.
+- **Configuración por variables de entorno:** `SECRET_KEY`, `DEBUG`, `DATABASE_URL`, `CORS_ORIGINS` (backend) y `VITE_API_URL` (frontend). En local no hacen falta: sin ellas el proyecto usa SQLite y `localhost`.
+- **Plan gratuito:** el backend se duerme tras 15 minutos sin uso, por lo que la primera carga puede tardar cerca de 1 minuto. La base de datos gratuita de Render expira a los 30 días de su creación.
 
 ## 👤 Autores
 | [<img src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" width=115><br><sub>Matias Flores</sub>](https://github.com/pitHongo) |
