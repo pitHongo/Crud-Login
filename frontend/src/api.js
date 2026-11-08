@@ -1,5 +1,6 @@
 // Ayudas comunes para hablar con la API (así cada página no repite lo mismo).
-export const API = 'http://localhost:8000/api'
+// En producción la dirección viene de VITE_API_URL; en tu PC se usa localhost.
+export const API = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
 
 // Datos de la sesión guardados en el navegador al iniciar sesión.
 export const sesion = {

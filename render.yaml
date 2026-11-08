@@ -1,0 +1,52 @@
+# Blueprint de Render: describe la base de datos, el backend (Django) y el frontend (React).
+# Las direcciones usan los nombres de los servicios: https://<nombre>.onrender.com
+
+databases:
+  - name: fightmetrics-db
+    plan: free
+    databaseName: fightmetrics
+    user: fightmetrics
+
+services:
+  # ---------- Backend: Django + gunicorn ----------
+  - type: web
+    name: fightmetrics-udla-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: bash build.sh
+    startCommand: gunicorn config.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: fightmetrics-db
+          property: connectionString
+      - key: CORS_ORIGINS
+        value: https://fightmetrics-udla-web.onrender.com
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: admin
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: admin@fightmetrics.com
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false            # Render te la pide al crear el proyecto (no se guarda en el repositorio)
+
+  # ---------- Frontend: React + Vite (sitio estático) ----------
+  - type: web
+    name: fightmetrics-udla-web
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://fightmetrics-udla-api.onrender.com/api
+    routes:
+      - type: rewrite        # las rutas de React Router (/rendimiento, etc.) siempre cargan index.html
+        source: /*
+        destination: /index.html

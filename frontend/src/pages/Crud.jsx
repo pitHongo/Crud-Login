@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
+import { API } from '../api'
 
 // ==========================================
 // VISTA (V) del patrón MVC: Interfaz gráfica
 // ==========================================
-
-const API = 'http://localhost:8000/api'
 
 export default function Crud() {
   const navigate = useNavigate()

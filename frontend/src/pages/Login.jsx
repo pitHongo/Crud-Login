@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link, useLocation, Navigate } from 'react-router-dom'
-
-const API = 'http://localhost:8000/api'
+import { API } from '../api'
 
 export default function Login() {
   const [loginUsuario, setLoginUsuario] = useState('')
